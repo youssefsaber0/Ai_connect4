@@ -165,7 +165,7 @@ def four_diagonally_nw(board,i,j):
     else:
         return 0
 def calculate_final_score(board):
-    # board = bit_to_matrix(board)
+    board = bit_to_matrix(board)
     player1_sc=0
     player2_sc=0
     for i in range(0,6):
@@ -194,13 +194,13 @@ def calculate_final_score(board):
                 if j+3<7:
                     player2_sc+=four_horz(board,i,j)
     return player1_sc,player2_sc
-board = [
-    [1,2,2,2,2,1,2],
-    [1,2,1,1,1,1,2],
-    [1,1,2,1,2,2,1],
-    [1,1,1,2,1,2,2],
-    [1,2,1,2,1,1,2],
-    [1,1,1,1,1,1,2],
-]
+# board = [
+#     [1,2,2,2,2,1,2],
+#     [1,2,1,1,1,1,2],
+#     [1,1,2,1,2,2,1],
+#     [1,1,1,2,1,2,2],
+#     [1,2,1,2,1,1,2],
+#     [1,1,1,1,1,1,2],
+# ]
 a,b=calculate_final_score(board)
 print(a,b)
