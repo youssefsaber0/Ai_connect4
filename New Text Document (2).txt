@@ -1,0 +1,24 @@
+# if j+mx<7 and board[i][j]!=board[i][j+mx]:
+                    #     score+=UNEMPTY[board[i][j]-1]
+                    # else:
+                    #     k= j+mx
+                    #     while k<7 and  board[i][k]==0:
+                    #         score+=EMPTY[board[i][j]-1]
+                    #         if k+1>=7 or board[i][j]==board[i][k+1]:
+                    #             break
+                    #         if k+1<7 and board[i][j]==board[i][k+1]:
+                    #             mx_h=max_horiz(board,i,k+1,visited)
+                    #             if mx_h == 1:
+                    #                 if board[i][j]==1:
+                    #                     score+=30
+                    #                 else:
+                    #                     score-=40
+                    #             elif max_h==2:
+                    #                 score+=TWO_CONNECTED[board[i][j]-1]
+                    #                 score+=UN_CONNECTED[board[i][j]-1]*(1/4)
+                    #             elif max_h==3:
+                    #                 score+=THREE_CONNECTED[board[i][j]-1]
+                    #                 score+=UN_CONNECTED[board[i][j]-1]*(2/4)
+                    #             k=k+max_h+1
+                    #         if k<7 and board[i][k]!=board[i][j]:
+                    #             score+=UNEMPTY[board[i][j]-1] 
