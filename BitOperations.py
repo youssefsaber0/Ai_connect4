@@ -229,8 +229,8 @@ def un_connected_d_n(board,i,j,visited,max_before,score):
                 if mx_h!=1:
                     score+=(mx_h/6)*UNEMPTY[board[i][j]-1]
     return score
-def heurastic1(board):
-    # board=bit_to_matrix(game)
+def heurastic1(game):
+    board=bit_to_matrix(game)
     """
     visited is 3d array to reduce reduandancy
     every intial element responsible for direct 0 horiz 1 ver 2 postive diagonal 
@@ -336,77 +336,6 @@ def heurastic1(board):
             elif board[i][j]==2:
                 score-=PRIORITY
     return score
-# # game[0:3] = 7|game[42:62]
-# game = xmpz(0)
-# # game[0:63]=~0
-# # game=game.bit_clear(42)
-# # game=game.bit_clear(45)
-# # game=game.bit_clear(48)
-# # game=game.bit_clear(51)
-# # game=game.bit_clear(54)
-# # game=game.bit_clear(57)
-# # game=game.bit_clear(60)
-# print((game[42:63]))
-# # # game[45:48]=~0
-# # print(bin(game))
-# # print(game.bit_length())
-# state, game = play(0, game, 1)
-# state, game = play(0, game, 1)
-# state, game = play(0, game, 1)
-# state, game = play(0, game, 1)
-# state, game = play(0, game, 1)
-# state, game = play(0, game, 1)
-# # print(game,state)
-# state, game = play(1, game, 1)
-# state, game = play(1, game, 1)
-# state, game = play(1, game, 1)
-# state, game = play(1, game, 1)
-# state, game = play(1, game, 1)
-# state, game = play(1, game, 1)
-# state, game = play(1, game, 1)
-# # print(state)
-# state, game = play(2, game, 1)
-# state, game = play(2, game, 1)
-# state, game = play(2, game, 1)
-# state, game = play(2, game, 1)
-# state, game = play(2, game, 1)
-# state, game = play(2, game, 1)
-# state, game = play(2, game, 1)
-# # print(state)
-# state, game = play(3, game, 1)
-# state, game = play(3, game, 1)
-# state, game = play(3, game, 1)
-# state, game = play(3, game, 1)
-# state, game = play(3, game, 1)
-# state, game = play(3, game, 1)
-# state, game = play(3, game, 1)
-# state, game = play(4, game, 1)
-# state, game = play(4, game, 1)
-# state, game = play(4, game, 1)
-# state, game = play(4, game, 1)
-# state, game = play(4, game, 1)
-# state, game = play(4, game, 0)
-# # state,game= play(4,game,0)
-# state, game = play(5, game, 1)
-# state, game = play(5, game, 1)
-# state, game = play(5, game, 1)
-# state, game = play(5, game, 1)
-# state, game = play(5, game, 1)
-# state, game = play(5, game, 1)
-# state, game = play(5, game, 1)
-# state, game = play(6, game, 1)
-# state, game = play(6, game, 1)
-# state, game = play(6, game, 1)
-# state, game = play(6, game, 1)
-# state, game = play(6, game, 1)
-# state, game = play(6, game, 1)
-# state, game = play(6, game, 1)
-# state, game = play(6, game, 1)
-
-# data = bit_to_matrix(game=game)
-# # print(bit_to_matrix(game=xmpz(0)))
-# for row in data:
-    # print(row)
 def four_horz(board,i,j):
     if board[i][j]==board[i][j+1] and board[i][j]==board[i][j+2] and board[i][j]==board[i][j+3]:
         return 1 
@@ -457,33 +386,4 @@ def calculate_final_score(board):
                 if j+3<7:
                     player2_sc+=four_horz(board,i,j)
     return player1_sc,player2_sc
-# board = [
-#     [1,2,2,2,2,1,2],
-#     [1,2,1,1,1,1,2],
-#     [1,1,2,1,2,2,1],
-#     [1,1,1,2,1,2,2],
-#     [1,2,1,2,1,1,2],
-#     [1,1,1,1,1,1,2],
-# ]
-# a,b=calculate_final_score(board)
-# print(a,b)
-state, game = play(0, xmpz(0), 1)
-state, game = play(0, game, 1)
-state, game = play(0, game, 1)
-state, game = play(0, game, 1)
-state, game = play(0, game, 0)
-state, game = play(6, game, 0)
-state, t = play(0, game, 1)
-print(bin(t))
-board = [
-    [1,1,1,0,1,1,1],
-    [2,2,2,0,2,2,2],
-    [0,0,0,0,0,0,0],
-    [1,1,1,0,2,2,2],
-    [0,0,0,0,0,0,0],
-    [0,0,0,1,1,2,2],
-]
-sc=heurastic1(board)
-# visited= [[[False for k in range(4)] for j in range(7)] for i in range(6)] 
-# sc=max_vert(board,0,0,visited)
-print(sc)
+    
