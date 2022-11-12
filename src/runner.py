@@ -8,76 +8,48 @@ import treebuilder
 All the code here is for testing purposes.
 """
 
+def input():
+    """
+    TODO: Take user input (col#), Perform the move and return the state.
+    Hint: Use the treebuilder.py. use construct_tree(root) and the tree is saved within the class.
+    Hint: Do not forget to clear the tree when drawing a new one. use treebuilder.tree.clear()
+    :return: the new state
+    """
+
+def print_board(state):
+    board = convert(state)
+    for i in range(len(board)-1, -1, -1):
+        print(board[i])
+
 
 def play():
-    root = Node([], 0, xmpz())
+    root = Node([], 0, xmpz(), None)
     heuristic = True
     pruning = True
+    max_depth = 5
     alpha = float('-inf')
     beta = float('inf')
 
     while True:
-        apply_algorithm(heuristic, root, 4, pruning, alpha, beta)
+        apply_algorithm(heuristic, root, max_depth, pruning, alpha, beta)
 
         # Now the root is modified.
         for i in range(len(root.children)):
             if root.value is root.children[i].value:
-                valid, state = do(i, root.state, root.turn)
+                valid, state = do(root.children[i].action, root.state, root.turn)
                 if valid:
-                    print(state)
-                root = Node([], root.children[i].turn, root.children[i].state)
-                heuristic = not heuristic
-                break
-
-        board = convert(state)
-        for i in range(len(board) - 1, -1, -1):
-            print(board[i])
+                    print("Player Turn = " + str(root.turn) + ", State = " + str(state))
+                    print_board(state)
+                    root = Node([], root.children[i].turn, root.children[i].state)
+                    heuristic = not heuristic
+                    break
 
         if check_end(state):
             break
 
-    board = convert(state)
-    for i in range(len(board) - 1, -1, -1):
-        print(board[i])
+    print("Game ended. Board is displayed below.")
+    print(state)
     print(get_score(state))
 
 
 play()
-
-# root1 = Node([], 0, xmpz(), None)
-# apply_algorithm(True, root1, 1, False)
-# root2 = Node([], 0, xmpz(), None)
-# apply_algorithm(False, root2, 1, False)
-#
-#
-# print(root1.value)
-# print(len(root1.children))
-#
-# for i in range(len(root1.children)):
-#     print(root1.children[i].value)
-#     print(root1.children[i].turn)
-#     print(root1.children[i].state)
-#     print()
-#
-# print("###########################")
-# print()
-#
-# print(root2.value)
-# print(len(root2.children))
-# for i in range(len(root2.children)):
-#     print(root2.children[i].value)
-#     print(root2.children[i].turn)
-#     print(root2.children[i].state)
-#     print()
-#
-# treebuilder.construct_tree(root1)
-# for i in range(len(treebuilder.tree)):
-#     print(str(treebuilder.tree[i].value), end=", ")
-# treebuilder.tree.clear()
-#
-# print()
-#
-# treebuilder.construct_tree(root2)
-# for i in range(len(treebuilder.tree)):
-#     print(str(treebuilder.tree[i].value), end=", ")
-# treebuilder.tree.clear()
