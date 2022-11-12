@@ -8,29 +8,55 @@ import treebuilder
 All the code here is for testing purposes.
 """
 
+
 def input():
     """
     TODO: Take user input (col#), Perform the move and return the state.
     Hint: Use the treebuilder.py. use construct_tree(root) and the tree is saved within the class.
-    Hint: Do not forget to clear the tree when drawing a new one. use treebuilder.tree.clear()
-    :return: the new state
+    Hint: Do not forget to clear the tree when drawing a new one. use treebuilder.tree.clear().
+
+    :parameter: col                 (int)
+    :parameter: current_state       (xmpz)
+    :parameter: user_turn           (int)
+    :parameter: heuristic           (boolean)
+    :parameter: maximum_depth       (int)
+    :parameter: pruning             (boolean)
+    :parameter: ai_only             (boolean)
+
+    :return: next_state             (xmpz)
     """
+
+    """
+    User Inputs.
+    """
+    col = None  # Store user input here
+    current_state = None  # Store current state here
+    heuristic = None  # Store chosen heuristic here
+    max_depth = None  # Store maximum depth here
+    pruning = None  # Store pruning here
+    ai_only = None  # Store whether the user wants the game to be played between 2 AI agents or not.
+
+    # Perform the move
+    valid, next_state = do(col, current_state, 0)
+    if valid:
+        play(next_state, heuristic, max_depth, pruning, ai_only)
+    else:
+        input()  # Ask the user for a valid move.
+
 
 def print_board(state):
     board = convert(state)
-    for i in range(len(board)-1, -1, -1):
+    for i in range(len(board) - 1, -1, -1):
         print(board[i])
 
 
-def play():
-    root = Node([], 0, xmpz(), None)
-    heuristic = True
-    pruning = True
-    max_depth = 5
-    alpha = float('-inf')
-    beta = float('inf')
+def play(current_state, heuristic, max_depth, pruning, ai_only):
+    root = Node([], 1, current_state, None)
+    if pruning:
+        alpha = float('-inf')
+        beta = float('inf')
 
-    while True:
+    while ai_only:
         apply_algorithm(heuristic, root, max_depth, pruning, alpha, beta)
 
         # Now the root is modified.
@@ -48,8 +74,9 @@ def play():
             break
 
     print("Game ended. Board is displayed below.")
-    print(state)
+    print_board(state)
     print(get_score(state))
 
 
-play()
+# Test Case
+play(xmpz(), True, 5, True, True)
