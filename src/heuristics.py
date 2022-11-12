@@ -27,7 +27,7 @@ def heuristic_one(state):
                     score += FOUR_CONNECTED[board[i][j] - 1] * (mx - 3)
                     k = j + mx
                     if k < 7:
-                        if board[k][j] == 0:
+                        if board[i][k] == 0:
                             score += EMPTY[board[i][j] - 1]
                         if k + 1 < 7 and board[i][j] == board[i][k + 1]:
                             max_h = max_horiz(board, i, k + 1, visited)
