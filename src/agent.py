@@ -36,7 +36,8 @@ def apply_algorithm(heuristic, root, depth, pruning, alpha=None, beta=None):
 def minimax(heuristic, root, depth):
     # If encountered any terminal case, add the child to the leaf nodes
     if check_end(root.state):
-        return get_score(root.state)
+        score_one, score_two = get_score(root.state)
+        return score_one - score_two
     if depth == 0:
         return heuristic(root.state)
 
@@ -64,7 +65,8 @@ def minimax(heuristic, root, depth):
 # Functions to apply the minimax algorithm with pruning on a tree of nodes
 def pruning_minimax(heuristic, root, depth, alpha, beta):
     if check_end(root.state):
-        return get_score(root.state)
+        score_one, score_two = get_score(root.state)
+        return score_one - score_two
     if depth == 0:
         return heuristic(root.state)
 
@@ -74,7 +76,7 @@ def pruning_minimax(heuristic, root, depth, alpha, beta):
             valid, next_state = play(i, root.state, 0)
             root.children.append(Node([], 1, next_state))
             root.children[i].value = max(root.value, pruning_minimax(heuristic, root.children[i], depth - 1, alpha, beta))
-            if beta <= root.children[i].value:
+            if beta < root.children[i].value:
                 return root.children[i].value
             alpha = max(alpha, root.children[i].value)
         for i in range(len(root.children)):
@@ -86,7 +88,7 @@ def pruning_minimax(heuristic, root, depth, alpha, beta):
             valid, next_state = play(i, root.state, 1)
             root.children.append(Node([], 0, next_state))
             root.children[i].value = min(root.value, pruning_minimax(heuristic, root.children[i], depth - 1, alpha, beta))
-            if alpha >= root.children[i].value:
+            if alpha > root.children[i].value:
                 return root.children[i].value
             beta = min(beta, root.children[i].value)
         for i in range(len(root.children)):
