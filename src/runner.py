@@ -1,5 +1,5 @@
 from agent import apply_algorithm
-from bitoperations import play as do
+from bitoperations import play as do, bits_to_matrix as convert, get_score, check_end
 from node import Node
 from gmpy2 import xmpz
 import treebuilder
@@ -17,7 +17,7 @@ def play():
     beta = float('inf')
 
     while True:
-        apply_algorithm(heuristic, root, 3, pruning, alpha, beta)
+        apply_algorithm(heuristic, root, 4, pruning, alpha, beta)
 
         # Now the root is modified.
         for i in range(len(root.children)):
@@ -26,10 +26,20 @@ def play():
                 if valid:
                     print(state)
                 root = Node([], root.children[i].turn, root.children[i].state)
+                heuristic = not heuristic
                 break
 
-        if not valid:
+        board = convert(state)
+        for i in range(len(board) - 1, -1, -1):
+            print(board[i])
+
+        if check_end(state):
             break
+
+    board = convert(state)
+    for i in range(len(board) - 1, -1, -1):
+        print(board[i])
+    print(get_score(state))
 
 
 play()
