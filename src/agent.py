@@ -1,4 +1,4 @@
-from BitOperations import play, check_end, get_score
+from bitoperations import play, check_end, get_score
 from node import Node
 from heuristics import heuristic_one, heuristic_two
 
