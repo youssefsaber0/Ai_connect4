@@ -44,19 +44,34 @@ def minimax(heuristic, root, depth):
     # Player turn decides whether the function is max (turn = 0) or min (turn = 1).
     if root.turn == 0:
         root.value = float('-inf')
+        valid_moves = 7
+        # 0 --> 6
         for i in range(7):
             valid, next_state = play(i, root.state, 0)
-            root.children.append(Node([], 1, next_state))
-            root.children[i].value = max(root.value, minimax(heuristic, root.children[i], depth - 1))
+            if valid:
+                root.children.append(Node([], 1, next_state, i))
+                root.children[len(root.children)-1].value = max(root.value,
+                                                                minimax(heuristic,
+                                                                        root.children[len(root.children)-1],
+                                                                        depth - 1))
+            else:
+                valid_moves -= 1
         for i in range(len(root.children)):
             root.value = max(root.value, root.children[i].value)
         return root.value
     else:
         root.value = float('inf')
+        valid_moves = 7
         for i in range(7):
             valid, next_state = play(i, root.state, 1)
-            root.children.append(Node([], 0, next_state))
-            root.children[i].value = min(root.value, minimax(heuristic, root.children[i], depth - 1))
+            if valid:
+                root.children.append(Node([], 0, next_state, i))
+                root.children[len(root.children)-1].value = min(root.value,
+                                                                minimax(heuristic,
+                                                                        root.children[len(root.children)-1],
+                                                                        depth - 1))
+            else:
+                valid_moves -= 1
         for i in range(len(root.children)):
             root.value = min(root.value, root.children[i].value)
         return root.value
@@ -72,25 +87,39 @@ def pruning_minimax(heuristic, root, depth, alpha, beta):
 
     if root.turn == 0:
         root.value = float('-inf')
-        for i in range(7):
+        valid_moves = 7
+        for i in range(valid_moves):
             valid, next_state = play(i, root.state, 0)
-            root.children.append(Node([], 1, next_state))
-            root.children[i].value = max(root.value, pruning_minimax(heuristic, root.children[i], depth - 1, alpha, beta))
-            if beta < root.children[i].value:
-                return root.children[i].value
-            alpha = max(alpha, root.children[i].value)
+            if valid:
+                root.children.append(Node([], 1, next_state, i))
+                root.children[len(root.children) - 1].value = max(root.value,
+                                                                  pruning_minimax(heuristic,
+                                                                                  root.children[len(root.children) - 1],
+                                                                                  depth - 1, alpha, beta))
+                if beta < root.children[len(root.children)-1].value:
+                    return root.children[len(root.children)-1].value
+                alpha = max(alpha, root.children[len(root.children)-1].value)
+            else:
+                valid_moves -= 1
         for i in range(len(root.children)):
             root.value = max(root.value, root.children[i].value)
         return root.value
     else:
         root.value = float('inf')
-        for i in range(7):
+        valid_moves = 7
+        for i in range(valid_moves):
             valid, next_state = play(i, root.state, 1)
-            root.children.append(Node([], 0, next_state))
-            root.children[i].value = min(root.value, pruning_minimax(heuristic, root.children[i], depth - 1, alpha, beta))
-            if alpha > root.children[i].value:
-                return root.children[i].value
-            beta = min(beta, root.children[i].value)
+            if valid:
+                root.children.append(Node([], 0, next_state, i))
+                root.children[len(root.children) - 1].value = min(root.value,
+                                                                  pruning_minimax(heuristic,
+                                                                                  root.children[len(root.children)-1],
+                                                                                  depth - 1, alpha, beta))
+                if alpha > root.children[len(root.children)-1].value:
+                    return root.children[len(root.children)-1].value
+                beta = min(beta, root.children[len(root.children)-1].value)
+            else:
+                valid_moves -= 1
         for i in range(len(root.children)):
             root.value = min(root.value, root.children[i].value)
         return root.value
