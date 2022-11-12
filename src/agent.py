@@ -1,58 +1,141 @@
-from BitOperations import play, check_end, calculate_final_score, heuristic
+from BitOperations import play, check_end, get_score
 from node import Node
+from heuristics import heuristic_one, heuristic_two
 
 """
 This file represents the agent playing against the player.
     The class should implement:
         - Minimax algorithm without pruning.
         - Minimax algorithm with pruning.
+        
+The main runner of this file is apply_algorithm.
+    Arguments:
+        heuristic: the heuristic to be applied as we have 2 heuristics.
+        root: the root of the tree.
+        depth: the maximum depth.
+        pruning: apply pruning or not.
+        alpha (optional): the alpha value if pruning is applied.
+        beta (optional): the beta value if pruning is applied.
+    Returns:
+        Minimax tree with weighted values.
 """
 
-leaf_nodes = []
 
-# Function to apply the minimax algorithm without pruning
-def minimax(turn, state, depth):
+def apply_algorithm(heuristic, root, depth, pruning, alpha=None, beta=None):
+    if heuristic and pruning:
+        pruning_minimax(heuristic_one, root, depth, alpha, beta)
+    elif heuristic and not pruning:
+        minimax(heuristic_one, root, depth)
+    elif not heuristic and pruning:
+        pruning_minimax(heuristic_two, root, depth, alpha, beta)
+    else:
+        minimax(heuristic_two, root, depth)
+
+
+# Function to apply the minimax algorithm without pruning on a tree of nodes
+def minimax(heuristic, root, depth):
+    # If encountered any terminal case, add the child to the leaf nodes
+    if check_end(root.state):
+        return get_score(root.state)
+    if depth == 0:
+        return heuristic(root.state)
+
+    # Player turn decides whether the function is max (turn = 0) or min (turn = 1).
+    if root.turn == 0:
+        root.value = float('-inf')
+        for i in range(7):
+            valid, next_state = play(i, root.state, 0)
+            root.children.append(Node([], 1, next_state))
+            root.children[i].value = max(root.value, minimax(heuristic, root.children[i], depth - 1))
+        for i in range(len(root.children)):
+            root.value = max(root.value, root.children[i].value)
+        return root.value
+    else:
+        root.value = float('inf')
+        for i in range(7):
+            valid, next_state = play(i, root.state, 1)
+            root.children.append(Node([], 0, next_state))
+            root.children[i].value = min(root.value, minimax(heuristic, root.children[i], depth - 1))
+        for i in range(len(root.children)):
+            root.value = min(root.value, root.children[i].value)
+        return root.value
+
+
+# Functions to apply the minimax algorithm with pruning on a tree of nodes
+def pruning_minimax(heuristic, root, depth, alpha, beta):
+    if check_end(root.state):
+        return get_score(root.state)
+    if depth == 0:
+        return heuristic(root.state)
+
+    if root.turn == 0:
+        root.value = float('-inf')
+        for i in range(7):
+            valid, next_state = play(i, root.state, 0)
+            root.children.append(Node([], 1, next_state))
+            root.children[i].value = max(root.value, pruning_minimax(heuristic, root.children[i], depth - 1, alpha, beta))
+            if beta <= root.children[i].value:
+                return root.children[i].value
+            alpha = max(alpha, root.children[i].value)
+        for i in range(len(root.children)):
+            root.value = max(root.value, root.children[i].value)
+        return root.value
+    else:
+        root.value = float('inf')
+        for i in range(7):
+            valid, next_state = play(i, root.state, 1)
+            root.children.append(Node([], 0, next_state))
+            root.children[i].value = min(root.value, pruning_minimax(heuristic, root.children[i], depth - 1, alpha, beta))
+            if alpha >= root.children[i].value:
+                return root.children[i].value
+            beta = min(beta, root.children[i].value)
+        for i in range(len(root.children)):
+            root.value = min(root.value, root.children[i].value)
+        return root.value
+
+
+# Function to apply the minimax algorithm without pruning. (This is not used)
+def minmax(turn, state, depth):
     best_move = None
     if check_end(state):
-        return calculate_final_score(state)
+        return get_score(state)
     if depth == 0:
-        # TODO: HEURISTIC FUNCTION IS YET TO BE IMPLEMENTED
-        return heuristic(state)
+        return heuristic_one(state)
 
     # Player turn decides whether the function is max (turn = 0) or min (turn = 1).
     if turn == 0:
         value = float('-inf')
         for i in range(7):
             next_state = play(i, state, 0)
-            if value < minimax(1, next_state, depth - 1):
+            if value < minmax(1, next_state, depth - 1):
                 best_move = next_state
-                value = minimax(1, next_state, depth - 1)
+                value = minmax(1, next_state, depth - 1)
         return value, best_move
     else:
         value = float('inf')
         for i in range(7):
             next_state = play(i, state, 1)
-            if value > minimax(0, next_state, depth - 1):
+            if value > minmax(0, next_state, depth - 1):
                 best_move = next_state
-                value = minimax(0, next_state, depth - 1)
+                value = minmax(0, next_state, depth - 1)
         return value, best_move
 
-# Function to apply the minimax algorithm with pruning.
-def pruningminimax(turn, state, depth, alpha, beta):
+
+# Function to apply the minimax algorithm with pruning. (This is not used)
+def pruning_minmax(turn, state, depth, alpha, beta):
     best_move = None
     if check_end(state):
-        return calculate_final_score(state)
+        return get_score(state)
     if depth == 0:
-        # TODO: HEURISTIC FUNCTION IS YET TO BE IMPLEMENTED
-        return heuristic(state)
+        return heuristic_one(state)
 
     if turn == 0:
         value = float('-inf')
         for i in range(7):
             next_state = play(i, state, 0)
-            if value < pruningminimax(1, next_state, depth - 1, alpha, beta):
+            if value < pruning_minmax(1, next_state, depth - 1, alpha, beta):
                 best_move = next_state
-                value = pruningminimax(1, next_state, depth - 1, alpha, beta)
+                value = pruning_minmax(1, next_state, depth - 1, alpha, beta)
             if beta < value:
                 return value
             alpha = max(alpha, value)
@@ -61,70 +144,10 @@ def pruningminimax(turn, state, depth, alpha, beta):
         value = float('inf')
         for i in range(7):
             next_state = play(i, state, 1)
-            if value > pruningminimax(0, next_state, depth - 1, alpha, beta):
+            if value > pruning_minmax(0, next_state, depth - 1, alpha, beta):
                 best_move = next_state
-                value = pruningminimax(0, next_state, depth - 1, alpha, beta)
+                value = pruning_minmax(0, next_state, depth - 1, alpha, beta)
             if alpha > value:
                 return value
             beta = min(beta, value)
         return value, best_move
-
-
-# Function to apply the minimax algorithm without pruning on a tree of nodes
-def minimax(root, depth):
-    # If encountered any terminal case, add the child to the leaf nodes
-    if check_end(root.state):
-        leaf_nodes.append(root)
-        return calculate_final_score(root.state)
-    if depth == 0:
-        leaf_nodes.append(root)
-        # TODO: HEURISTIC FUNCTION IS YET TO BE IMPLEMENTED
-        return heuristic(root.state)
-
-    # Player turn decides whether the function is max (turn = 0) or min (turn = 1).
-    if root.turn == 0:
-        root.value = float('-inf')
-        for i in range(7):
-            valid, next_state = play(i, root.state, 0)
-            child = Node(root, 1, next_state)
-            child.value = max(root.value, minimax(child, depth - 1))
-        return child.value
-    else:
-        root.value = float('inf')
-        for i in range(7):
-            valid, next_state = play(i, root.state, 1)
-            child = Node(root, 0, next_state)
-            child.value = min(root.value, minimax(child, depth - 1))
-        return child.value
-
-
-# Functions to apply the minimax algorithm with pruning on a tree of nodes
-def pruningminimax(root, depth, alpha, beta):
-    if check_end(root.state):
-        leaf_nodes.append(root)
-        return calculate_final_score(root.state)
-    if depth == 0:
-        leaf_nodes.append(root)
-        # TODO: HEURISTIC FUNCTION IS YET TO BE IMPLEMENTED
-        return heuristic(root.state)
-
-    if root.turn == 0:
-        root.value = float('-inf')
-        for i in range(7):
-            valid, next_state = play(i, root.state, 0)
-            child = Node(root, 1, next_state)
-            child.value = max(root.value, pruningminimax(child, depth - 1, alpha, beta))
-            if beta < child.value:
-                return child.value
-            alpha = max(alpha, child.value)
-        return child.value
-    else:
-        root.value = float('inf')
-        for i in range(7):
-            valid, next_state = play(i, root.state, 1)
-            child = Node(root, 0, next_state)
-            child.value = min(root.value, pruningminimax(child, depth - 1, alpha, beta))
-            if alpha > child.value:
-                return child.value
-            beta = min(beta, child.value)
-        return child.value
