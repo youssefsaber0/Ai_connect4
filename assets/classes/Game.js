@@ -4,7 +4,6 @@ class Game {
     this.finished = true
 
     this.game_state = "0000000000000000000"
-    this.scores = [0, 0];
 
     Object.preventExtensions()
   }
@@ -30,10 +29,24 @@ class Game {
       url: `http://127.0.0.1:5000`,
       data: {
         state: this.game_state,
-        col: player_move
+        col: player_move,
+        depth: $("#depth").val(),
+        pruning: $("[name=pruning]:checked").val(),
+        heureristic: $("[name=heueristic]:checked").val()
       },
       success: function (response) {
-        console.log(response)
+        if(this.board.turn == 'red')
+          return
+
+        response = JSON.parse(response)
+        this.game_state = response.state
+        
+        this.board.drop(response.col)
+
+        $("#score1").html(response.scores[0])
+        $("#score2").html(response.scores[1])
+
+
       }.bind(this),
       error: function(err) {
         Swal.fire({
@@ -43,10 +56,6 @@ class Game {
       },
       complete: function() {}
     })
-  }
-
-  __showResults() {
-    console.log("Showing Results")
   }
 
   start() {
@@ -61,10 +70,9 @@ class Game {
   }
   
   apply(col) {
-    this.board.drop(col, this.turn)
+    this.board.drop(col)
     
-    let bot_decision = this.__botDecision(col)
-    this.board.drop(bot_decision)
+    this.__botDecision(col)
 
     if(parseInt(this.board.state) == 0)
       this.end()

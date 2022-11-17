@@ -40,6 +40,7 @@ body {
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
+  appearance: none;
   margin: 0;
 }
 
@@ -106,13 +107,17 @@ main {
   color: #fff;
 }
 
-.loader {
-  border: 16px solid #f3f3f3;
-  border-top: 16px solid #3498db;
-  border-radius: 50%;
-  width: 120px;
-  height: 120px;
-  animation: spin 0.5s linear infinite;
+.results {
+  margin-top: 39px;
+  background: var(--neutral--2);
+  border-radius: 5px;
+  padding: 15px;
+  color: var(--neutral-2);
+}
+
+.results span {
+  color: green;
+  margin-left: 10px;
 }
 
 @keyframes spin {
