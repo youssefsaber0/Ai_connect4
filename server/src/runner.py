@@ -9,7 +9,7 @@ All the code here is for testing purposes.
 """
 
 
-def input():
+def input(col, current_state, max_depth, heuristic=True, pruning=False, ai_only=False):
     """
     TODO: Take user input (col#), Perform the move and return the state.
     Hint: Use the treebuilder.py. use construct_tree(root) and the tree is saved within the class.
@@ -18,30 +18,21 @@ def input():
     :parameter: col                 (int)
     :parameter: current_state       (xmpz)
     :parameter: user_turn           (int)
-    :parameter: heuristic           (boolean)
     :parameter: maximum_depth       (int)
+    :parameter: heuristic           (boolean)
     :parameter: pruning             (boolean)
     :parameter: ai_only             (boolean)
 
     :return: next_state             (xmpz)
     """
 
-    """
-    User Inputs.
-    """
-    col = None  # Store user input here
-    current_state = None  # Store current state here
-    heuristic = None  # Store chosen heuristic here
-    max_depth = None  # Store maximum depth here
-    pruning = None  # Store pruning here
-    ai_only = None  # Store whether the user wants the game to be played between 2 AI agents or not.
-
     # Perform the move
-    valid, next_state = do(col, current_state, 0)
+    valid, next_state = do(col, xmpz(current_state), 0)
     if valid:
-        play(next_state, heuristic, max_depth, pruning, ai_only)
+        next_state = play(next_state, heuristic, max_depth, pruning, ai_only)
     else:
         input()  # Ask the user for a valid move.
+    return int(next_state), get_score(next_state)
 
 
 def print_board(state):
@@ -56,7 +47,10 @@ def play(current_state, heuristic, max_depth, pruning, ai_only):
         alpha = float('-inf')
         beta = float('inf')
 
-    while ai_only:
+    if ai_only:
+        states = []
+
+    while True:
         apply_algorithm(heuristic, root, max_depth, pruning, alpha, beta)
 
         # Now the root is modified.
@@ -70,14 +64,10 @@ def play(current_state, heuristic, max_depth, pruning, ai_only):
                     heuristic = not heuristic
                     break
 
-        if check_end(state):
-            break
+        if not ai_only:
+            return state
 
-    # print("Game ended. Board is displayed below.")
-    # print_board(state)
-    # print(get_score(state))
-
-    print(int(state))
+        states.append(state)
 
 
 # Test Case
