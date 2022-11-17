@@ -1,7 +1,7 @@
 <html>
 
 <head>
-  <title>8-blocks puzzle</title>
+  <title>Connect 4</title>
   <link rel="stylesheet" href="assets/vendor/bootstrap.min.css">
   <link rel="stylesheet" href="assets/vendor/sweetalert2.min.css">
   <link rel="stylesheet" href="assets/vendor/boxicons/boxicons.min.css">
@@ -11,49 +11,47 @@
 
 <body>
   <div class="sidebar">
-    <!-- <h4>Algorithm</h4>
-    <div class="form-check form-check-inline">
-      <input checked class="form-check-input" type="radio" name="algorithm" id="DFS" value="dfs">
-      <label class="form-check-label" for="DFS">DFS</label>
-    </div>
-    <div class="form-check form-check-inline">
-      <input class="form-check-input" type="radio" name="algorithm" id="BFS" value="bfs">
-      <label class="form-check-label" for="BFS">BFS</label>
-    </div>
-    <div class="form-check form-check-inline">
-      <input class="form-check-input" type="radio" name="algorithm" id="a-star" value="a-star">
-      <label class="form-check-label" for="a-star">A*</label>
-    </div>
-    <hr>
-    <div id="heueristic" class="disabled">
-      <h6>Heueristic Function</h5>
-        <div class="form-check form-check-inline">
-          <input disabled checked class="form-check-input" type="radio" name="heueristic" id="man"
-            value="manhattan_distance">
-          <label class="form-check-label" for="DFS">Manhattan</label>
-        </div>
-        <div class="form-check form-check-inline">
-          <input disabled class="form-check-input" type="radio" name="heueristic" id="euc" value="euclidean_distance">
-          <label class="form-check-label" for="euc">Euclidean</label>
-        </div>
+    <h4>Bot Properties</h4>
+    <div>
+      <div class="form-check form-check-inline">
+        <input checked class="form-check-input" type="radio" name="heueristic" id="bot_1"
+          value="0">
+        <label class="form-check-label" for="bot_1">bot 1</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="heueristic" id="bot_2" value="1">
+        <label class="form-check-label" for="bot_2">bot 2</label>
+      </div>
     </div>
     <hr>
+    <div>
+      <h6>More properties</h6>
+      <br>
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <div class="input-group-text">
+            Max Depth
+          </div>
+        </div>
+        <input class="form-control" type="number" name="depth" min="1" max="9" value="4">
+      </div>
 
-    <div class="results">
-      <p>Explored: <span id="explored">—</span></p>
-      <p>Depth: <span id="depth">—</span></p>
-      <p>Time Taken: <span id="time_taken">—</span></p>
-      <button disabled class="btn btn-primary mx-auto d-block" id="steps" onclick="player.open()">Show Steps</button>
-    </div> -->
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="pruning" id="pruning" value="0">
+        <label class="form-check-label" for="pruning">No Pruning</label>
+      </div>
+
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="pruning" id="pruning" value="1">
+        <label class="form-check-label" for="pruning">Pruning</label>
+      </div>
+    </div>
+
   </div>
   <main>
     <div id="board">
     </div>
   </main>
-
-  <div id="loader" class="full-page hidden">
-    <div class="loader"></div>
-  </div>
 
 
   <script src="assets/vendor/jquery.js"></script>

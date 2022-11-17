@@ -14,6 +14,14 @@ $(document).ready(function (){
   game = new Game(board)
 
   game.start()
+
+  $("[name=depth]").on('input', function(e){
+    let val = $("[name=depth]").val()
+    if(val < 1)
+      $("[name=depth]").val(1)
+    else if(val > 9)
+      $("[name=depth]").val(9)
+    })
 });
 
 // var puzzle, solver, player
@@ -42,27 +50,3 @@ $(document).ready(function (){
 //     }
 //   })
 // });
-
-function reset() {
-  puzzle.reset()
-
-  $("#explored").html("—")
-  $("#time_taken").html("—")
-  $("#depth").html("—")
-
-  $("#steps").attr("disabled", "disabled")
-}
-
-let shownAt = new Date().getTime()
-function preloader() {
-  if (!$("#loader").hasClass("hidden")) { // Hiding preloader
-    let till_500_millis = 500 - new Date().getTime() + shownAt
-    setTimeout(function () {
-      $("#loader").toggleClass('hidden')
-    }, till_500_millis)
-  }
-  else { // Showing Preloader
-    shownAt = new Date().getTime()
-    $("#loader").toggleClass('hidden')
-  }
-}
