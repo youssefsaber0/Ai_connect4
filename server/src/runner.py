@@ -46,7 +46,7 @@ def play(current_state, heuristic, max_depth, pruning, ai_only):
 
         for i in range(len(root.children)):
             if root.value is root.children[i].value:
-                return root.state, root.children[i].action
+                return root.children[i].state, root.children[i].action
 
     else:   # AI only mode
         states = []
