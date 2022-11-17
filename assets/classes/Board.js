@@ -29,6 +29,10 @@ class Board {
     return $(this.container).find(selector)
   }
 
+  __turn(turn) {
+    $("#turn").html(turn + "'s turn").css("color", `var(--${turn})`)
+  }
+
   drop(col) {
     if(this.state[col] == 0)
       throw new ColumnOverflow;
@@ -41,8 +45,7 @@ class Board {
     // Update state
     this.state = this.state.replaceAt(col, this.state[col] - 1)
     this.turn = this.turn == "red" ? "yellow" : "red"
-
-    $("#turn").html(this.turn + "'s turn").css("color", `var(--${this.turn})`)
+    this.__turn(this.turn)
   }
 
   reset() {
@@ -51,7 +54,7 @@ class Board {
     this.state = "6666666"
     this.turn = "red"
 
-    $("#turn").html(this.turn + "'s turn")
+    this.__turn("red")
     $("#score1").html(0)
     $("#score2").html(0)
   }
