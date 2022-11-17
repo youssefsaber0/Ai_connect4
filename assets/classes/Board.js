@@ -1,7 +1,10 @@
 class Board {
+  PLAYER = "red"
+  BOT = "yellow"
+
   constructor(wrapper) {
     this.container = wrapper
-    this.turn = "red"
+    this.turn = this.PLAYER
     this.state = "6666666"
 
     this.__initBoard()
@@ -9,7 +12,7 @@ class Board {
   }
 
   __initBoard() {
-    this.__turn(this.turn)
+    this.__showTurn()
     $("#score1").html(0)
     $("#score2").html(0)
 
@@ -29,8 +32,15 @@ class Board {
     return $(this.container).find(selector)
   }
 
-  __turn(turn) {
-    $("#turn").html(turn + "'s turn").css("color", `var(--${turn})`)
+  __showTurn(turn=null) {
+    if(turn)
+      this.turn = turn   
+
+    $("#turn").html(this.turn + "'s turn").css("color", `var(--${this.turn})`)
+  }
+
+  __toggleTurn() {
+    this.__showTurn(this.turn == this.PLAYER ? this.BOT : this.PLAYER)
   }
 
   drop(col) {
@@ -44,17 +54,15 @@ class Board {
 
     // Update state
     this.state = this.state.replaceAt(col, this.state[col] - 1)
-    this.turn = this.turn == "red" ? "yellow" : "red"
-    this.__turn(this.turn)
+    this.__toggleTurn()
   }
 
   reset() {
     this.$(".yellow-slot").removeClass("yellow-slot")
     this.$(".red-slot").removeClass("red-slot")
     this.state = "6666666"
-    this.turn = "red"
 
-    this.__turn("red")
+    this.__showTurn(Board.PLAYER)
     $("#score1").html(0)
     $("#score2").html(0)
   }
@@ -63,5 +71,6 @@ class Board {
 class ColumnOverflow extends Error {
   constructor(){
     super("Column is filled")
+    this.name = "ColumnOverflow"
   }
 }

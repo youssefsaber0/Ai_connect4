@@ -9,14 +9,27 @@ class Game {
   }
 
   __onListeners() {
-    this.board.$("[col]").on('click', function(e){
+    this.board.$("[col]").on('click', function (e) {
+      if (this.board.turn == this.board.BOT)
+        return;
+
       let col
-      if($(e.target).hasClass("slot"))
+      if ($(e.target).hasClass("slot"))
         col = $(e.target).closest("[col]").attr('col')
       else
         col = $(e.target).attr('col')
-  
-      this.apply(col)
+
+      try {
+        this.apply(col)
+      }
+      catch (e) {
+        if (e.name == 'ColumnOverflow')
+          Swal.fire({
+            title: "Forbidden",
+            text: "Column is full",
+            icon: "error"
+          })
+      }
     }.bind(this))
   }
 
@@ -35,26 +48,29 @@ class Game {
         heureristic: $("[name=heueristic]:checked").val()
       },
       success: function (response) {
-        if(this.board.turn == 'red')
+        if (this.board.turn == this.board.PLAYER)
           return
 
         response = JSON.parse(response)
         this.game_state = response.state
-        
+
         this.board.drop(response.col)
 
         $("#score1").html(response.scores[0])
         $("#score2").html(response.scores[1])
 
+        if (parseInt(this.board.state) == 0)
+          this.end()
 
       }.bind(this),
-      error: function(err) {
+      error: function (err) {
         Swal.fire({
-          title: "Server Failure",
+          title: "Oops! Server Failure",
+          text: "Please Reset",
           icon: 'error'
         })
       },
-      complete: function() {}
+      complete: function () { }
     })
   }
 
@@ -66,15 +82,28 @@ class Game {
   end() {
     this.finished = true
     this.__offListeners();
-    this.__showResults()
+    if ($("#score1").html() > $("#score2").html())
+      Swal.fire({
+        title: "Winner",
+        color: "green"
+      })
+    else if($("#score1").html() == $("#score2").html())
+      Swal.fire({
+        title: "Draw",
+        color: "var(--yellow)"
+      })
+
+    else {
+      Swal.fire({
+        title: "Draw",
+        color: "var(--red)"
+      }) 
+    }
   }
-  
+
   apply(col) {
     this.board.drop(col)
-    
-    this.__botDecision(col)
 
-    if(parseInt(this.board.state) == 0)
-      this.end()
+    this.__botDecision(col)
   }
 }
