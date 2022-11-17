@@ -1,6 +1,6 @@
-from agent import apply_algorithm
-from bitoperations import play as do, bits_to_matrix as convert, get_score, check_end
-from node import Node
+from src.agent import apply_algorithm
+from src.bitoperations import play as do, bits_to_matrix as convert, get_score, check_end
+from src.node import Node
 from gmpy2 import gmpy2, xmpz
 
 """
