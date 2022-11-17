@@ -9,7 +9,7 @@ class Board {
   }
 
   __initBoard() {
-    $("#turn").html(this.turn + "'s turn")
+    this.__turn(this.turn)
     $("#score1").html(0)
     $("#score2").html(0)
 
