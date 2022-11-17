@@ -22,7 +22,9 @@ class Board {
       `);
       for (let row = 0; row < 6; row++) {
         $(this.container).find("[col=" + col + "]").append(`
-          <div class="slot"></div>
+          <div class="slot">
+            <div class="slot-fill" style="top:-90px;"></div>
+          </div>
         `)
       }
     }
@@ -48,9 +50,9 @@ class Board {
       throw new ColumnOverflow;
 
     // Drop piece
-    let slot = this.$(`[col=${col}] .slot:nth-child(${parseInt(this.state[col])})`)
-    console.log(`[col=${col}] .slot:nth-child(${parseInt(this.state[col])})`)
+    let slot = this.$(`[col=${col}] .slot:nth-child(${parseInt(this.state[col])}) .slot-fill`)
     $(slot).addClass(`${this.turn}-slot`)
+    $(slot).css("top", 10 + 90 * (this.state[col] - 1))
 
     // Update state
     this.state = this.state.replaceAt(col, this.state[col] - 1)
