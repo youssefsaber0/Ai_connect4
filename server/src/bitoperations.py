@@ -70,7 +70,6 @@ Returns:
 def bits_to_matrix(state):
     # An auxiliary function to help the GUI and the heuristics.
     board = [[0 for i in range(7)] for j in range(6)]
-    board[0][0] = 2
     for i in range(0, 7):
         start_index = 42 + i * 3
         end_index = start_index + 3
