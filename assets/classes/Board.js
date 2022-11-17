@@ -12,7 +12,7 @@ class Board {
   }
 
   __initBoard() {
-    this.__showTurn()
+    this.showTurn()
     $("#score1").html(0)
     $("#score2").html(0)
 
@@ -32,7 +32,7 @@ class Board {
     return $(this.container).find(selector)
   }
 
-  __showTurn(turn=null) {
+  showTurn(turn=null) {
     if(turn)
       this.turn = turn   
 
@@ -40,7 +40,7 @@ class Board {
   }
 
   __toggleTurn() {
-    this.__showTurn(this.turn == this.PLAYER ? this.BOT : this.PLAYER)
+    this.showTurn(this.turn == this.PLAYER ? this.BOT : this.PLAYER)
   }
 
   drop(col) {
@@ -55,16 +55,6 @@ class Board {
     // Update state
     this.state = this.state.replaceAt(col, this.state[col] - 1)
     this.__toggleTurn()
-  }
-
-  reset() {
-    this.$(".yellow-slot").removeClass("yellow-slot")
-    this.$(".red-slot").removeClass("red-slot")
-    this.state = "6666666"
-
-    this.__showTurn(Board.PLAYER)
-    $("#score1").html(0)
-    $("#score2").html(0)
   }
 }
 

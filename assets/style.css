@@ -95,6 +95,11 @@ main {
   right: -40px;
 }
 
+#board.disabled {
+  opacity: 0.8;
+  pointer-events: none;
+}
+
 .sidebar {
   width: 33vw !important;
   padding: 20px;

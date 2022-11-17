@@ -13,8 +13,6 @@ $(document).ready(function (){
   board = new Board($("#board"))
   game = new Game(board)
 
-  game.start()
-
   $("[name=depth]").on('input', function(e){
     let val = $("[name=depth]").val()
     if(val < 1)

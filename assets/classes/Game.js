@@ -1,14 +1,14 @@
 class Game {
   constructor(board) {
     this.board = board
-    this.finished = true
-
     this.game_state = "0000000000000000000"
+
+    this.__initListeners()
 
     Object.preventExtensions()
   }
 
-  __onListeners() {
+  __initListeners() {
     this.board.$("[col]").on('click', function (e) {
       if (this.board.turn == this.board.BOT)
         return;
@@ -31,10 +31,6 @@ class Game {
           })
       }
     }.bind(this))
-  }
-
-  __offListeners() {
-    this.board.$("[col]").off('click')
   }
 
   __botDecision(player_move) {
@@ -74,20 +70,15 @@ class Game {
     })
   }
 
-  start() {
-    this.finished = false;
-    this.__onListeners();
-  }
-
   end() {
-    this.finished = true
-    this.__offListeners();
-    if ($("#score1").html() > $("#score2").html())
+    $(this.board.container).addClass("disabled")
+
+    if (parseInt($("#score1").html()) > parseInt($("#score2").html()))
       Swal.fire({
         title: "Winner",
         color: "green"
       })
-    else if($("#score1").html() == $("#score2").html())
+    else if(parseInt($("#score1").html()) == parseInt( $("#score2").html()))
       Swal.fire({
         title: "Draw",
         color: "var(--yellow)"
@@ -95,7 +86,7 @@ class Game {
 
     else {
       Swal.fire({
-        title: "Draw",
+        title: "Lose",
         color: "var(--red)"
       }) 
     }
@@ -105,5 +96,18 @@ class Game {
     this.board.drop(col)
 
     this.__botDecision(col)
+  }
+
+  reset() {
+    this.game_state = "0000000000000000000"
+    $("#score1").html(0)
+    $("#score2").html(0)
+
+    $(this.board.container).removeClass("disabled")
+    this.board.$(".yellow-slot").removeClass("yellow-slot")
+    this.board.$(".red-slot").removeClass("red-slot")
+
+    this.board.state = "6666666"
+    this.board.showTurn(Board.PLAYER)
   }
 }
