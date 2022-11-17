@@ -33,7 +33,13 @@ class Game {
         col: player_move
       },
       success: function (response) {
-        console.log(response)
+        response = JSON.parse(response)
+        this.state = response.state
+        
+        this.board.drop(response.col)
+        this.scores = [response.score1, response.score2]
+
+
       }.bind(this),
       error: function(err) {
         Swal.fire({
@@ -45,13 +51,16 @@ class Game {
     })
   }
 
-  __showResults() {
-    console.log("Showing Results")
+  __updateStats(score1 = 0, score2 = 0) {
+    $("#turn").html(this.board.turn + "'s turn")
+    $("#score1").html(score1)
+    $("#score2").html(score2)
   }
 
   start() {
     this.finished = false;
     this.__onListeners();
+    this.__updateStats(0, 0);
   }
 
   end() {
@@ -61,10 +70,9 @@ class Game {
   }
   
   apply(col) {
-    this.board.drop(col, this.turn)
+    this.board.drop(col)
     
-    let bot_decision = this.__botDecision(col)
-    this.board.drop(bot_decision)
+    this.__botDecision(col)
 
     if(parseInt(this.board.state) == 0)
       this.end()
