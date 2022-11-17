@@ -1,7 +1,11 @@
-from src.agent import apply_algorithm
-from src.bitoperations import play as do, bits_to_matrix as convert, get_score, check_end
-from src.node import Node
-from gmpy2 import gmpy2, xmpz
+import time
+import sys
+
+from agent import apply_algorithm
+from bitoperations import play as do, bits_to_matrix as convert, get_score, check_end
+from node import Node
+from gmpy2 import xmpz
+from treebuilder import construct_tree
 
 """
 Main runner and tester.
@@ -40,22 +44,38 @@ def play(current_state, heuristic, max_depth, pruning, ai_only):
     alpha = float('-inf')
     beta = float('inf')
 
-    if not ai_only: # Player vs AI mode
+    if not ai_only:  # Player vs AI mode
         root = Node([], 1, current_state, None)
         apply_algorithm(heuristic, root, max_depth, pruning, alpha, beta)
+
+        tree = construct_tree(root)
+        print("THE PRE-ORDERED TREE:")
+        for i in range(len(tree)):
+            if i != len(tree) - 1:
+                print(tree[i].value, end=', ')
+            else:
+                print(tree[i].value, end='\n')
 
         for i in range(len(root.children)):
             if root.value is root.children[i].value:
                 return root.children[i].state, root.children[i].action
 
-    else:   # AI only mode
+    else:  # AI only mode
+        if pruning:
+            sys.stdout = open('with-pruning.txt', 'w')
+        else:
+            sys.stdout = open('without-pruning.txt', 'w')
         states = []
 
         root = Node([], 0, current_state, None)
         while True:
+            start = time.time()
+
             if check_end(root.state):
+                sys.stdout.close()
                 return states
-            apply_algorithm(heuristic, root, max_depth, pruning, alpha, beta)
+
+            expansions = apply_algorithm(heuristic, root, max_depth, pruning, alpha, beta)
 
             for i in range(len(root.children)):
                 if root.value is root.children[i].value:
@@ -64,11 +84,11 @@ def play(current_state, heuristic, max_depth, pruning, ai_only):
                     heuristic = not heuristic
                     break
 
-            print(convert(root.state))
-            print("EXPANSIONS = " + str(root.expansions))
+            print(str(expansions.expansions) + ', ' + str(time.time() - start))
 
 
 if __name__ == "__main__":
     play(xmpz(), True, 5, True, True)
 
 play(xmpz(), True, 5, True, True)
+play(xmpz(), True, 5, False, True)

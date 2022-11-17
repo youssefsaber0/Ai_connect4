@@ -1,6 +1,6 @@
-from src.bitoperations import play, check_end, get_score
-from src.node import Node
-from src.heuristics import heuristic_one, heuristic_two
+from bitoperations import play, check_end, get_score
+from node import Node
+from heuristics import heuristic_one, heuristic_two
 
 """
 This file represents the agent playing against the player.
@@ -21,19 +21,26 @@ The main runner of this file is apply_algorithm.
 """
 
 
+class Expansions:
+    def __init__(self, expansions=0):
+        self.expansions = expansions
+
+
 def apply_algorithm(heuristic, root, depth, pruning, alpha=None, beta=None):
+    expansions = Expansions(0)
     if heuristic and pruning:
-        pruning_minimax(heuristic_one, root, depth, alpha, beta)
+        pruning_minimax(heuristic_one, root, depth, alpha, beta, expansions)
     elif heuristic and not pruning:
-        minimax(heuristic_one, root, depth)
+        minimax(heuristic_one, root, depth, expansions)
     elif not heuristic and pruning:
-        pruning_minimax(heuristic_two, root, depth, alpha, beta)
+        pruning_minimax(heuristic_two, root, depth, alpha, beta, expansions)
     else:
-        minimax(heuristic_two, root, depth)
+        minimax(heuristic_two, root, depth, expansions)
+    return expansions
 
 
 # Function to apply the minimax algorithm without pruning on a tree of nodes
-def minimax(heuristic, root, depth):
+def minimax(heuristic, root, depth, expansions):
     # If encountered any terminal case, add the child to the leaf nodes
     if check_end(root.state):
         score_one, score_two = get_score(root.state)
@@ -47,11 +54,13 @@ def minimax(heuristic, root, depth):
         for i in range(7):
             valid, next_state = play(i, root.state, 0)
             if valid:
+                expansions.expansions += 1
                 root.children.append(Node([], 1, next_state, i))
                 root.children[len(root.children)-1].value = max(root.value,
                                                                 minimax(heuristic,
                                                                         root.children[len(root.children)-1],
-                                                                        depth - 1))
+                                                                        depth - 1,
+                                                                        expansions))
         for i in range(len(root.children)):
             root.value = max(root.value, root.children[i].value)
         return root.value
@@ -60,18 +69,20 @@ def minimax(heuristic, root, depth):
         for i in range(7):
             valid, next_state = play(i, root.state, 1)
             if valid:
+                expansions.expansions += 1
                 root.children.append(Node([], 0, next_state, i))
                 root.children[len(root.children)-1].value = min(root.value,
                                                                 minimax(heuristic,
                                                                         root.children[len(root.children)-1],
-                                                                        depth - 1))
+                                                                        depth - 1,
+                                                                        expansions))
         for i in range(len(root.children)):
             root.value = min(root.value, root.children[i].value)
         return root.value
 
 
 # Functions to apply the minimax algorithm with pruning on a tree of nodes
-def pruning_minimax(heuristic, root, depth, alpha, beta):
+def pruning_minimax(heuristic, root, depth, alpha, beta, expansions):
     if check_end(root.state):
         score_one, score_two = get_score(root.state)
         return score_one - score_two
@@ -80,41 +91,37 @@ def pruning_minimax(heuristic, root, depth, alpha, beta):
 
     if root.turn == 0:
         root.value = float('-inf')
-        root.expansions = 0
         for i in range(7):
             valid, next_state = play(i, root.state, 0)
             if valid:
+                expansions.expansions += 1
                 root.children.append(Node([], 1, next_state, i))
                 root.children[len(root.children) - 1].value = max(root.value,
                                                                   pruning_minimax(heuristic,
                                                                                   root.children[len(root.children) - 1],
-                                                                                  depth - 1, alpha, beta))
+                                                                                  depth - 1, alpha, beta, expansions))
                 if beta < root.children[len(root.children)-1].value:
                     return root.children[len(root.children)-1].value
                 alpha = max(alpha, root.children[len(root.children)-1].value)
         for i in range(len(root.children)):
             root.value = max(root.value, root.children[i].value)
-        expansions = len(root.children)
-        root.expansions += expansions
         return root.value
     else:
         root.value = float('inf')
-        root.expansions = 0
         for i in range(7):
             valid, next_state = play(i, root.state, 1)
             if valid:
+                expansions.expansions += 1
                 root.children.append(Node([], 0, next_state, i))
                 root.children[len(root.children) - 1].value = min(root.value,
                                                                   pruning_minimax(heuristic,
                                                                                   root.children[len(root.children)-1],
-                                                                                  depth - 1, alpha, beta))
+                                                                                  depth - 1, alpha, beta, expansions))
                 if alpha > root.children[len(root.children)-1].value:
                     return root.children[len(root.children)-1].value
                 beta = min(beta, root.children[len(root.children)-1].value)
         for i in range(len(root.children)):
             root.value = min(root.value, root.children[i].value)
-        expansions = len(root.children)
-        root.expansions += expansions
         return root.value
 
 
