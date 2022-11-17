@@ -47,6 +47,10 @@ input::-webkit-inner-spin-button {
   min-width: 130px;
 }
 
+.input-group {
+  margin: 20px 0; 
+}
+
 
 
 
