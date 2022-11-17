@@ -54,7 +54,6 @@ def minimax(heuristic, root, depth):
                                                                         depth - 1))
         for i in range(len(root.children)):
             root.value = max(root.value, root.children[i].value)
-            root.expansions += len(root.children)
         return root.value
     else:
         root.value = float('inf')
@@ -68,7 +67,6 @@ def minimax(heuristic, root, depth):
                                                                         depth - 1))
         for i in range(len(root.children)):
             root.value = min(root.value, root.children[i].value)
-            root.expansions += len(root.children)
         return root.value
 
 
@@ -82,6 +80,7 @@ def pruning_minimax(heuristic, root, depth, alpha, beta):
 
     if root.turn == 0:
         root.value = float('-inf')
+        root.expansions = 0
         for i in range(7):
             valid, next_state = play(i, root.state, 0)
             if valid:
@@ -95,10 +94,12 @@ def pruning_minimax(heuristic, root, depth, alpha, beta):
                 alpha = max(alpha, root.children[len(root.children)-1].value)
         for i in range(len(root.children)):
             root.value = max(root.value, root.children[i].value)
-            root.expansions += len(root.children)
+        expansions = len(root.children)
+        root.expansions += expansions
         return root.value
     else:
         root.value = float('inf')
+        root.expansions = 0
         for i in range(7):
             valid, next_state = play(i, root.state, 1)
             if valid:
@@ -112,7 +113,8 @@ def pruning_minimax(heuristic, root, depth, alpha, beta):
                 beta = min(beta, root.children[len(root.children)-1].value)
         for i in range(len(root.children)):
             root.value = min(root.value, root.children[i].value)
-            root.expansions += len(root.children)
+        expansions = len(root.children)
+        root.expansions += expansions
         return root.value
 
 
