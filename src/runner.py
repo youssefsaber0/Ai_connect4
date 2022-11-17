@@ -9,7 +9,7 @@ All the code here is for testing purposes.
 """
 
 
-def input():
+def input(col,current_state,heuristic,max_depth,pruning):
     """
     TODO: Take user input (col#), Perform the move and return the state.
     Hint: Use the treebuilder.py. use construct_tree(root) and the tree is saved within the class.
@@ -37,11 +37,12 @@ def input():
     ai_only = None  # Store whether the user wants the game to be played between 2 AI agents or not.
 
     # Perform the move
-    valid, next_state = do(col, current_state, 0)
+    valid, next_state = do(col, xmpz(current_state), 0)
     if valid:
         play(next_state, heuristic, max_depth, pruning, ai_only)
     else:
         input()  # Ask the user for a valid move.
+    return int(next_state), get_score(next_state)
 
 
 def print_board(state):
@@ -56,7 +57,10 @@ def play(current_state, heuristic, max_depth, pruning, ai_only):
         alpha = float('-inf')
         beta = float('inf')
 
-    while ai_only:
+    if ai_only:
+        states = []
+
+    while True:
         apply_algorithm(heuristic, root, max_depth, pruning, alpha, beta)
 
         # Now the root is modified.
@@ -73,9 +77,10 @@ def play(current_state, heuristic, max_depth, pruning, ai_only):
         if check_end(state):
             break
 
-    print("Game ended. Board is displayed below.")
-    print_board(state)
-    print(get_score(state))
+        if not ai_only:
+            return state
+
+        states.append(state)
 
 
 # Test Case
