@@ -1,11 +1,10 @@
-from src.agent import apply_algorithm
-from src.bitoperations import play as do, bits_to_matrix as convert, get_score, check_end
-from src.node import Node
+from agent import apply_algorithm
+from bitoperations import play as do, bits_to_matrix as convert, get_score, check_end
+from node import Node
 from gmpy2 import gmpy2, xmpz
-import src.treebuilder
 
 """
-All the code here is for testing purposes.
+Main runner and tester.
 """
 
 
@@ -47,27 +46,26 @@ def play(current_state, heuristic, max_depth, pruning, ai_only):
         alpha = float('-inf')
         beta = float('inf')
 
-    if ai_only:
-        states = []
-
-    while True:
+    if not ai_only: # Player vs AI mode
         apply_algorithm(heuristic, root, max_depth, pruning, alpha, beta)
 
-        # Now the root is modified.
         for i in range(len(root.children)):
             if root.value is root.children[i].value:
-                valid, state = do(root.children[i].action, root.state, root.turn)
-                if valid:
-                    print("Player Turn = " + str(root.turn) + ", State = " + str(state))
-                    print_board(state)
+                return root.children[i].value, root.children[i].action
+
+    else:   # AI only mode
+        states = []
+        while True:
+            if check_end(root.state):
+                return states
+            apply_algorithm(heuristic, root, max_depth, pruning, alpha, beta)
+
+            for i in range(len(root.children)):
+                if root.value is root.children[i].value:
+                    states.append(root.children[i].state)
                     root = Node([], root.children[i].turn, root.children[i].state)
                     heuristic = not heuristic
                     break
-
-        if not ai_only:
-            return state, root.action
-
-        states.append(state)
 
 
 if __name__ == "__main__":
