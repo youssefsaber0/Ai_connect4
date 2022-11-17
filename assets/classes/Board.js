@@ -2,13 +2,17 @@ class Board {
   constructor(wrapper) {
     this.container = wrapper
     this.turn = "red"
-    this.state = "7777777"
+    this.state = "6666666"
 
     this.__initBoard()
     Object.preventExtensions()
   }
 
   __initBoard() {
+    $("#turn").html(this.turn + "'s turn")
+    $("#score1").html(0)
+    $("#score2").html(0)
+
     for (let col = 0; col < 7; col++) {
       $(this.container).append(`
         <div class="col" col="${col}"></div>
@@ -31,12 +35,25 @@ class Board {
 
     // Drop piece
     let slot = this.$(`[col=${col}] .slot:nth-child(${parseInt(this.state[col])})`)
+    console.log(`[col=${col}] .slot:nth-child(${parseInt(this.state[col])})`)
     $(slot).addClass(`${this.turn}-slot`)
 
     // Update state
     this.state = this.state.replaceAt(col, this.state[col] - 1)
     this.turn = this.turn == "red" ? "yellow" : "red"
 
+    $("#turn").html(this.turn + "'s turn").css("color", `var(--${this.turn})`)
+  }
+
+  reset() {
+    this.$(".yellow-slot").removeClass("yellow-slot")
+    this.$(".red-slot").removeClass("red-slot")
+    this.state = "6666666"
+    this.turn = "red"
+
+    $("#turn").html(this.turn + "'s turn")
+    $("#score1").html(0)
+    $("#score2").html(0)
   }
 }
 

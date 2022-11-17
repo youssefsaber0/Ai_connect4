@@ -4,7 +4,6 @@ class Game {
     this.finished = true
 
     this.game_state = "0000000000000000000"
-    this.scores = [0, 0];
 
     Object.preventExtensions()
   }
@@ -30,14 +29,22 @@ class Game {
       url: `http://127.0.0.1:5000`,
       data: {
         state: this.game_state,
-        col: player_move
+        col: player_move,
+        depth: $("#depth").val(),
+        pruning: $("[name=pruning]:checked").val(),
+        heureristic: $("[name=heueristic]:checked").val()
       },
       success: function (response) {
+        if(this.board.turn == 'red')
+          return
+
         response = JSON.parse(response)
-        this.state = response.state
+        this.game_state = response.state
         
         this.board.drop(response.col)
-        this.scores = [response.score1, response.score2]
+
+        $("#score1").html(response.scores[0])
+        $("#score2").html(response.scores[1])
 
 
       }.bind(this),
@@ -51,16 +58,9 @@ class Game {
     })
   }
 
-  __updateStats(score1 = 0, score2 = 0) {
-    $("#turn").html(this.board.turn + "'s turn")
-    $("#score1").html(score1)
-    $("#score2").html(score2)
-  }
-
   start() {
     this.finished = false;
     this.__onListeners();
-    this.__updateStats(0, 0);
   }
 
   end() {
