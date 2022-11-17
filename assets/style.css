@@ -72,6 +72,7 @@ main {
   background: var(--primary-2);
   justify-content: space-between;
   position: relative;
+  z-index: 1;
 }
 
 #board:before,
@@ -93,6 +94,11 @@ main {
 
 #board:after {
   right: -40px;
+}
+
+#board.disabled {
+  opacity: 0.8;
+  pointer-events: none;
 }
 
 .sidebar {
@@ -119,17 +125,6 @@ main {
   color: green;
   margin-left: 10px;
 }
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
 
 
 
@@ -179,21 +174,23 @@ button.close {
 
 /* Board */
 #board .slot {
-  width: 100%;
+  width: 90px;
   background: var(--neutral--2);
   aspect-ratio: 1;
   border: 10px solid var(--primary-2);
-  border-radius: 50%;
-  position: relative;
+  border-radius: 50%; 
 }
 
-#board .slot:before {
+.slot-fill {
   content: "";
-  width: 100%;
-  height: 100%;
+  width: 70px;
+  height: 70px;
   border-radius: 50%;
   position: absolute;
-  box-shadow: 0 0 0 2px var(--primary-1), inset 10px 10px 20px rgb(0 0 0 / 84%);
+  box-shadow: inset 10px 10px 20px rgb(0 0 0 / 84%);
+  transition: top 2s;
+  opacity: 0;
+  z-index: 0;
 }
 
 [col]:hover {
@@ -201,25 +198,14 @@ button.close {
   cursor: pointer;
 }
 
-
-@keyframes fall {
-  0% {
-
-  }
-
-  100% {
-
-  }
-}
-
-.red-slot:before, .yellow-slot:before {
-  animation: fall 1s;
-}
-
-.red-slot:before {
+.red-slot {
+  opacity: 1;
+  display:block;
   background-color: var(--red);
 }
 
-.yellow-slot:before {
+.yellow-slot {
+  opacity: 1;
+  display:block;
   background-color: var(--yellow);
 }

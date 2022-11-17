@@ -1,11 +1,11 @@
 import time
 import sys
 
-from agent import apply_algorithm
-from bitoperations import play as do, bits_to_matrix as convert, get_score, check_end
-from node import Node
+from src.agent import apply_algorithm
+from src.bitoperations import play as do, bits_to_matrix as convert, get_score, check_end
+from src.node import Node
 from gmpy2 import xmpz
-from treebuilder import construct_tree
+from src.treebuilder import construct_tree
 
 """
 Main runner and tester.
