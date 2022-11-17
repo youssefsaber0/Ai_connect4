@@ -41,6 +41,7 @@ def print_board(state):
 
 
 def play(current_state, heuristic, max_depth, pruning, ai_only):
+    global alpha, beta
     root = Node([], 1, current_state, None)
     if pruning:
         alpha = float('-inf')
