@@ -9,7 +9,7 @@ All the code here is for testing purposes.
 """
 
 
-def input(col,current_state,heuristic,max_depth,pruning):
+def input(col, current_state, max_depth, heuristic=True, pruning=False, ai_only=False):
     """
     TODO: Take user input (col#), Perform the move and return the state.
     Hint: Use the treebuilder.py. use construct_tree(root) and the tree is saved within the class.
@@ -18,28 +18,18 @@ def input(col,current_state,heuristic,max_depth,pruning):
     :parameter: col                 (int)
     :parameter: current_state       (xmpz)
     :parameter: user_turn           (int)
-    :parameter: heuristic           (boolean)
     :parameter: maximum_depth       (int)
+    :parameter: heuristic           (boolean)
     :parameter: pruning             (boolean)
     :parameter: ai_only             (boolean)
 
     :return: next_state             (xmpz)
     """
 
-    """
-    User Inputs.
-    """
-    col = None  # Store user input here
-    current_state = None  # Store current state here
-    heuristic = None  # Store chosen heuristic here
-    max_depth = None  # Store maximum depth here
-    pruning = None  # Store pruning here
-    ai_only = None  # Store whether the user wants the game to be played between 2 AI agents or not.
-
     # Perform the move
     valid, next_state = do(col, xmpz(current_state), 0)
     if valid:
-        play(next_state, heuristic, max_depth, pruning, ai_only)
+        next_state = play(next_state, heuristic, max_depth, pruning, ai_only)
     else:
         input()  # Ask the user for a valid move.
     return int(next_state), get_score(next_state)
@@ -73,9 +63,6 @@ def play(current_state, heuristic, max_depth, pruning, ai_only):
                     root = Node([], root.children[i].turn, root.children[i].state)
                     heuristic = not heuristic
                     break
-
-        if check_end(state):
-            break
 
         if not ai_only:
             return state
