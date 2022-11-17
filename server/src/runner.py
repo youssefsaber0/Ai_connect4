@@ -1,7 +1,7 @@
 from agent import apply_algorithm
 from bitoperations import play as do, bits_to_matrix as convert, get_score, check_end
 from node import Node
-from gmpy2 import gmpy2, xmpz
+from gmpy2 import xmpz
 
 """
 Main runner and tester.
@@ -41,6 +41,7 @@ def print_board(state):
 
 
 def play(current_state, heuristic, max_depth, pruning, ai_only):
+    global alpha, beta
     root = Node([], 1, current_state, None)
     if pruning:
         alpha = float('-inf')

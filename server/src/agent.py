@@ -1,6 +1,6 @@
-from src.bitoperations import play, check_end, get_score
-from src.node import Node
-from src.heuristics import heuristic_one, heuristic_two
+from bitoperations import play, check_end, get_score
+from node import Node
+from heuristics import heuristic_one, heuristic_two
 
 """
 This file represents the agent playing against the player.
@@ -54,6 +54,7 @@ def minimax(heuristic, root, depth):
                                                                         depth - 1))
         for i in range(len(root.children)):
             root.value = max(root.value, root.children[i].value)
+            root.expansions += len(root.children)
         return root.value
     else:
         root.value = float('inf')
@@ -67,6 +68,7 @@ def minimax(heuristic, root, depth):
                                                                         depth - 1))
         for i in range(len(root.children)):
             root.value = min(root.value, root.children[i].value)
+            root.expansions += len(root.children)
         return root.value
 
 
@@ -93,6 +95,7 @@ def pruning_minimax(heuristic, root, depth, alpha, beta):
                 alpha = max(alpha, root.children[len(root.children)-1].value)
         for i in range(len(root.children)):
             root.value = max(root.value, root.children[i].value)
+            root.expansions += len(root.children)
         return root.value
     else:
         root.value = float('inf')
@@ -109,6 +112,7 @@ def pruning_minimax(heuristic, root, depth, alpha, beta):
                 beta = min(beta, root.children[len(root.children)-1].value)
         for i in range(len(root.children)):
             root.value = min(root.value, root.children[i].value)
+            root.expansions += len(root.children)
         return root.value
 
 
