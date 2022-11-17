@@ -1,8 +1,8 @@
-from agent import apply_algorithm
-from bitoperations import play as do, bits_to_matrix as convert, get_score, check_end
-from node import Node
+from src.agent import apply_algorithm
+from src.bitoperations import play as do, bits_to_matrix as convert, get_score, check_end
+from src.node import Node
 from gmpy2 import gmpy2, xmpz
-import treebuilder
+import src.treebuilder
 
 """
 All the code here is for testing purposes.
@@ -27,12 +27,12 @@ def input(col, current_state, max_depth, heuristic=True, pruning=False, ai_only=
     """
 
     # Perform the move
-    valid, next_state = do(col, xmpz(current_state), 0)
+    valid, next_state = do(int(col), xmpz(current_state), 0)
     if valid:
-        next_state = play(next_state, heuristic, max_depth, pruning, ai_only)
+        next_state, action = play(next_state, heuristic, max_depth, pruning, ai_only)
     else:
         input()  # Ask the user for a valid move.
-    return int(next_state), get_score(next_state)
+    return int(next_state), action, get_score(next_state)
 
 
 def print_board(state):
@@ -65,10 +65,11 @@ def play(current_state, heuristic, max_depth, pruning, ai_only):
                     break
 
         if not ai_only:
-            return state
+            return state, root.action
 
         states.append(state)
 
 
-# Test Case
-play(xmpz(), True, 5, True, True)
+if __name__ == "__main__":
+    # Test Case
+    play(xmpz(), True, 5, True, True)

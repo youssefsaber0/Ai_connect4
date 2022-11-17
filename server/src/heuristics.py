@@ -1,4 +1,4 @@
-from bitoperations import bits_to_matrix
+from src.bitoperations import bits_to_matrix
 
 FOUR_CONNECTED = [4000, -4500]
 THREE_CONNECTED = [500, -500]

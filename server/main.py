@@ -3,7 +3,7 @@ from flask_cors import CORS
 import json
 from time import time_ns
 
-from server.endpoints.Bot import Bot
+from endpoints.Bot import Bot
 from endpoints.ResponseExceptions import *
 
 def micros() -> int:
@@ -23,12 +23,12 @@ def botDecision():
   except Exception:
     return "Fail", 500
 
-  state, scores = endpoint.handle()
+  state, action, scores = endpoint.handle()
 
   return json.dumps({
     'state': state,
-    'scores': scores,
-    ''
+    'col': action,
+    'scores': scores
   })
 
 app.run()

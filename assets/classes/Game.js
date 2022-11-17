@@ -63,7 +63,8 @@ class Game {
   apply(col) {
     this.board.drop(col, this.turn)
     
-    col = this.__botDecision()
+    let bot_decision = this.__botDecision(col)
+    this.board.drop(bot_decision)
 
     if(parseInt(this.board.state) == 0)
       this.end()
