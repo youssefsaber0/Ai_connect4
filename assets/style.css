@@ -37,6 +37,15 @@ body {
   display: none;
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.input-group-text {
+  min-width: 130px;
+}
 
 
 
@@ -195,7 +204,7 @@ button.close {
 }
 
 .red-slot:before, .yellow-slot:before {
-  animation: fall 2s;
+  animation: fall 1s;
 }
 
 .red-slot:before {
