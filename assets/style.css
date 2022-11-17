@@ -1,0 +1,207 @@
+/* Configurations */
+:root {
+  --secondary--2: #FEFAEB;
+  --secondary--1: #F8D147;
+  --secondary: #C0A237;
+  --secondary-1: #857026;
+  --primary-2: #584A19;
+
+  --primary--2: #F6FBFD;
+  --primary--1: #B1DBEF;
+  --primary: #51AEDC;
+  --primary-1: #0078B4;
+  --primary-2: #005077;
+
+  --neutral--2: #FAFAFA;
+  --neutral--1: #D4D4D4;
+  --neutral: #A4A4A4;
+  --neutral-1: #727272;
+  --neutral-2: #4B4B4B;
+
+  --red: #FE6F5C;
+  --yellow: #F8D147;
+}
+
+* {
+  transition: all 0.3s;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  background-color: var(--neutral--2);
+  justify-content: space-between;
+}
+
+.hidden {
+  display: none;
+}
+
+
+
+
+
+/* Wireframe styling */
+main {
+  width: 67%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+}
+
+#board {
+  box-shadow: 0 8px 20px 10px;
+  display: flex;
+  height: 540px;
+  aspect-ratio: 7 / 6;
+  background: var(--primary-2);
+  justify-content: space-between;
+  position: relative;
+}
+
+#board:before,
+#board:after {
+  content: "";
+  box-shadow: 0px 9px 11px rgb(0 0 0 / 80%);
+  display: block;
+  z-index: 2;
+  width: 40px;
+  background: var(--primary-2);
+  position: absolute;
+  height: 106%;
+  top: -3%;
+}
+
+#board:before {
+  left: -40px;
+}
+
+#board:after {
+  right: -40px;
+}
+
+.sidebar {
+  width: 33vw !important;
+  padding: 20px;
+  height: 70vh;
+  box-shadow: 2px 0px 2px 0px var(--primary-2);
+  border-top-right-radius: 20px;
+  margin-right: 50px;
+  border-bottom-right-radius: 20px;
+  background: var(--primary-2);
+  color: #fff;
+}
+
+.loader {
+  border: 16px solid #f3f3f3;
+  border-top: 16px solid #3498db;
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  animation: spin 0.5s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+
+
+
+/* Buttons */
+.btn-primary {
+  background-color: var(--primary-1);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  color: #fff;
+  background-color: var(--primary-2);
+}
+
+.btn-secondary {
+  background-color: var(--secondary-1);
+}
+
+.btn-secondary:hover {
+  background-color: var(--primary-2);
+}
+
+.btn-neutral {
+  color: #fff;
+  background-color: var(--neutral);
+}
+
+.btn-neutral:hover {
+  color: #fff;
+  background-color: var(--neutral-1);
+}
+
+button.close {
+  box-shadow: 0 0 3px 1px;
+  position: absolute;
+  top: 20px;
+  right: 20;
+  background: var(--neutral);
+  border: none;
+  color: #fff;
+  font-size: 25px;
+}
+
+
+
+
+
+/* Board */
+#board .slot {
+  width: 100%;
+  background: var(--neutral--2);
+  aspect-ratio: 1;
+  border: 10px solid var(--primary-2);
+  border-radius: 50%;
+  position: relative;
+}
+
+#board .slot:before {
+  content: "";
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  position: absolute;
+  box-shadow: 0 0 0 2px var(--primary-1), inset 10px 10px 20px rgb(0 0 0 / 84%);
+}
+
+[col]:hover {
+  background: rgb(0 0 0 / 47%);
+  cursor: pointer;
+}
+
+
+@keyframes fall {
+  0% {
+
+  }
+
+  100% {
+
+  }
+}
+
+.red-slot:before, .yellow-slot:before {
+  animation: fall 2s;
+}
+
+.red-slot:before {
+  background-color: var(--red);
+}
+
+.yellow-slot:before {
+  background-color: var(--yellow);
+}

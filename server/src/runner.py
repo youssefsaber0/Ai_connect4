@@ -1,7 +1,7 @@
 from agent import apply_algorithm
 from bitoperations import play as do, bits_to_matrix as convert, get_score, check_end
 from node import Node
-from gmpy2 import xmpz
+from gmpy2 import gmpy2, xmpz
 import treebuilder
 
 """
@@ -73,9 +73,11 @@ def play(current_state, heuristic, max_depth, pruning, ai_only):
         if check_end(state):
             break
 
-    print("Game ended. Board is displayed below.")
-    print_board(state)
-    print(get_score(state))
+    # print("Game ended. Board is displayed below.")
+    # print_board(state)
+    # print(get_score(state))
+
+    print(int(state))
 
 
 # Test Case
