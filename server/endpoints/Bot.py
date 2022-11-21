@@ -16,7 +16,7 @@ class Bot(IEndpoint):
   def handle(self):
     return input(request.args.get('col'),
       request.args.get('state'),
-      request.args.get('depth'),
-      request.args.get('heueristic'),
-      request.args.get('pruning'),
+      int(request.args.get('depth')),
+      request.args.get('heueristic') == 1,
+      request.args.get('pruning') == 1
     )

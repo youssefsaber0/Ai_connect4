@@ -14,10 +14,10 @@ class Game {
         return;
 
       let col
-      if ($(e.target).hasClass("slot"))
-        col = $(e.target).closest("[col]").attr('col')
-      else
+      if ($(e.target)[0].hasAttribute("col"))
         col = $(e.target).attr('col')
+      else
+        col = $(e.target).closest("[col]").attr('col')
 
       try {
         this.apply(col)
@@ -39,7 +39,7 @@ class Game {
       data: {
         state: this.game_state,
         col: player_move,
-        depth: $("#depth").val(),
+        depth: $("[name=depth]").val(),
         pruning: $("[name=pruning]:checked").val(),
         heureristic: $("[name=heueristic]:checked").val()
       },
@@ -60,12 +60,13 @@ class Game {
 
       }.bind(this),
       error: function (err) {
+        $(this.board.container).addClass("disabled")
         Swal.fire({
           title: "Oops! Server Failure",
           text: "Please Reset",
           icon: 'error'
         })
-      },
+      }.bind(this),
       complete: function () { }
     })
   }
@@ -104,10 +105,10 @@ class Game {
     $("#score2").html(0)
 
     $(this.board.container).removeClass("disabled")
-    this.board.$(".yellow-slot").removeClass("yellow-slot")
-    this.board.$(".red-slot").removeClass("red-slot")
+    this.board.$(".yellow-slot").removeClass("yellow-slot").css("top", "-90px")
+    this.board.$(".red-slot").removeClass("red-slot").css("top", "-90px")
 
     this.board.state = "6666666"
-    this.board.showTurn(Board.PLAYER)
+    this.board.showTurn(this.board.PLAYER)
   }
 }

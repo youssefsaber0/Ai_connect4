@@ -89,6 +89,5 @@ def play(current_state, heuristic, max_depth, pruning, ai_only):
 
 if __name__ == "__main__":
     play(xmpz(), True, 5, True, True)
-
-play(xmpz(), True, 5, True, True)
-play(xmpz(), True, 5, False, True)
+    # play(xmpz(), True, 5, True, True)
+    # play(xmpz(), True, 5, False, True)
