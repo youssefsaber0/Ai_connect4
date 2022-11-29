@@ -11,7 +11,6 @@ from src.treebuilder import construct_tree
 Main runner and tester.
 """
 
-
 def input(col, current_state, max_depth, heuristic=True, pruning=False, ai_only=False):
     """
     :parameter: col                 (int)

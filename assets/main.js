@@ -8,10 +8,11 @@ String.prototype.replaceAt = function(index, replacement) {
   return this.substring(0, index) + replacement.toString() + this.substring(index + 1);
 }
 
-var board, game
+var board, game, tree
 $(document).ready(function (){
   board = new Board($("#board"))
   game = new Game(board)
+  tree = new Tree()
 
   $("[name=depth]").on('input', function(e){
     let val = $("[name=depth]").val()

@@ -64,39 +64,56 @@ main {
   padding: 10px;
 }
 
-#board {
-  box-shadow: 0 8px 20px 10px;
+.col {
+  position: relative;
+}
+
+.board {
   display: flex;
-  height: 540px;
   aspect-ratio: 7 / 6;
   background: var(--primary-2);
   justify-content: space-between;
   position: relative;
   z-index: 1;
+  height: 20%;;
 }
 
-#board:before,
-#board:after {
+.tree > * {
+  margin: 10vh auto;
+}
+
+.tree .d-flex {
+  height:20%;
+  margin-right: 30px;
+  margin-left: 30px;
+}
+
+.d-flex .board {
+  height:100%;
+}
+
+.board:before,
+.board:after {
+  width: 6%;
   content: "";
   box-shadow: 0px 9px 11px rgb(0 0 0 / 80%);
   display: block;
   z-index: 2;
-  width: 40px;
   background: var(--primary-2);
   position: absolute;
   height: 106%;
   top: -3%;
 }
 
-#board:before {
-  left: -40px;
+.board:before {
+  left: -6%;
 }
 
-#board:after {
-  right: -40px;
+.board:after {
+  right: -6%;
 }
 
-#board.disabled {
+.board.disabled {
   opacity: 0.7;
   pointer-events: none;
 }
@@ -171,20 +188,18 @@ button.close {
 
 
 
-
-/* Board */
-#board .slot {
-  width: 90px;
+/* Boards */
+.board .slot {
   background: var(--neutral--2);
   aspect-ratio: 1;
-  border: 10px solid var(--primary-2);
+  border: 3px solid var(--primary-2);
   border-radius: 50%; 
 }
 
-.slot-fill {
+.board .slot-fill {
+  width: calc(100% - 6px);
   content: "";
-  width: 70px;
-  height: 70px;
+  aspect-ratio: 1;
   border-radius: 50%;
   position: absolute;
   box-shadow: inset 10px 10px 20px rgb(0 0 0 / 84%);
@@ -193,19 +208,47 @@ button.close {
   z-index: 0;
 }
 
-[col]:hover {
-  background: rgb(0 0 0 / 47%);
-  cursor: pointer;
-}
-
-.red-slot {
+.board .red-slot {
   opacity: 1;
   display:block;
   background-color: var(--red);
 }
 
-.yellow-slot {
+.board .yellow-slot {
   opacity: 1;
   display:block;
   background-color: var(--yellow);
+}
+
+/* Main board */
+#board {
+  height: 540px;
+  box-shadow: 0 8px 20px 10px;
+}
+
+#board .slot {
+  border: 10px solid var(--primary-2);
+}
+
+#board .slot-fill {
+  width: calc(100% - 20px);
+}
+
+#board [col]:hover {
+  background: rgb(0 0 0 / 47%);
+  cursor: pointer;
+}
+
+
+
+
+
+/* Tree */
+.tree {
+  position: fixed;
+  top: 0;
+  height: 100vh;
+  width: 100vw;
+  background: #ebebeb7a;
+  z-index: 1;
 }
