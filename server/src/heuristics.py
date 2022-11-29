@@ -285,7 +285,12 @@ def un_connected_d_n(board, i, j, visited, max_before, score):
     return score
 
 
+table = {0: 1}
+
+
 def heuristic_two(state):
+    if table.get(state)!=None:
+        return table.get(state)
     board = bits_to_matrix(state)
     player1_sc = 0
     player2_sc = 0
@@ -301,64 +306,65 @@ def heuristic_two(state):
                 barr = 1
             score += getscore(n, 0, 0, barr, 0)
             #################################################################################################
-            n = n_diagonally_ne(board, i, j)
-            opens, barr, barr2, n2 = 0, 0, 0, 0
-            if i + n < 6 and j + n < 7 and board[i + n][j + n] == 0 and not (
-                    n < 4 and i - 1 >= 0 and j - 1 >= 0 and board[i - 1][j - 1] == board[i][j]):
-                opens += 1
-            if opens > 0:
-                barr += n_diagonally_ne(board, i + n, j + n)
-                for q in range(barr):
-                    if board[i + n + q - 1][j + n + q] != 0:
-                        barr2 += 1
-            if i + n + barr < 6 and j + n + barr < 7 and board[i + n + barr][j + n + barr] == board[i][j]:
-                n2 = n_diagonally_ne(board, i + n + barr, j + n + barr)
-            barr2 = barr + barr2
-            prev = 0
-            while i - prev >= 0 and j - prev >= 0 and board[i - prev][j - prev] == 0:
-                prev = prev + 1
-            score += getscore(n, n2, barr2 - 1, barr, prev)
+            if not (i - 1 >= 0 and j - 1 >= 0 and board[i - 1][j - 1] == board[i][j]):
+                n = n_diagonally_ne(board, i, j)
+                opens, barr, barr2, n2 = 0, 0, 0, 0
+                if i + n < 6 and j + n < 7 and board[i + n][j + n] == 0:
+                    opens += 1
+                if opens > 0:
+                    barr += n_diagonally_ne(board, i + n, j + n)
+                    for q in range(barr):
+                        if board[i + n + q - 1][j + n + q] != 0:
+                            barr2 += 1
+                if i + n + barr < 6 and j + n + barr < 7 and board[i + n + barr][j + n + barr] == board[i][j]:
+                    n2 = n_diagonally_ne(board, i + n + barr, j + n + barr)
+                barr2 = barr + barr2
+                prev = 0
+                while i - prev >= 0 and j - prev >= 0 and board[i - prev][j - prev] == 0:
+                    prev = prev + 1
+                score += getscore(n, n2, barr2 - 1, barr, prev)
             #################################################################################################
-            n = n_diagonally_nw(board, i, j)
-            opens, barr, barr2, n2 = 0, 0, 0, 0
-            if i + n < 6 and j - n >= 0 and board[i + n][j - n] == 0 and not (
-                    n < 4 and i - 1 >= 0 and j + 1 < 7 and board[i - 1][j + 1] == board[i][j]):
-                opens += 1
-            if opens > 0:
-                barr += n_diagonally_nw(board, i + n, j - n)
-                for q in range(barr):
-                    if board[i + n + q - 1][j - n - q] != 0:
-                        barr2 += 1
-            if i + n + barr < 6 and j - n - barr >= 0 and board[i + n + barr][j - n - barr] == board[i][j]:
-                n2 = n_diagonally_nw(board, i + n + barr, j - n - barr)
-            barr2 = barr + barr2
-            prev = 0
-            while i - prev >= 0 and j + prev < 7 and board[i - prev][j + prev] == 0:
-                prev = prev + 1
-            score += getscore(n, n2, barr2 - 1, barr, prev)
+            if not (i - 1 >= 0 and j + 1 < 7 and board[i - 1][j + 1] == board[i][j]):
+                n = n_diagonally_nw(board, i, j)
+                opens, barr, barr2, n2 = 0, 0, 0, 0
+                if i + n < 6 and j - n >= 0 and board[i + n][j - n] == 0:
+                    opens += 1
+                if opens > 0:
+                    barr += n_diagonally_nw(board, i + n, j - n)
+                    for q in range(barr):
+                        if board[i + n + q - 1][j - n - q] != 0:
+                            barr2 += 1
+                if i + n + barr < 6 and j - n - barr >= 0 and board[i + n + barr][j - n - barr] == board[i][j]:
+                    n2 = n_diagonally_nw(board, i + n + barr, j - n - barr)
+                barr2 = barr + barr2
+                prev = 0
+                while i - prev >= 0 and j + prev < 7 and board[i - prev][j + prev] == 0:
+                    prev = prev + 1
+                score += getscore(n, n2, barr2 - 1, barr, prev)
             #################################################################################################
-            n = n_horz(board, i, j)
-            opens, barr, barr2, n2 = 0, 0, 0, 0
-            if j + n < 7 and board[i][j + n] == 0 and not (n < 4 and j - 1 >= 0 and board[i][j - 1] == board[i][j]):
-                opens += 1
-            if opens > 0:
-                barr += n_horz(board, i, j + n)
-                for q in range(barr):
-                    if i - 1 < 0 or board[i - 1][j + n + q] != 0:
-                        barr2 += 1
-            if j + n + barr < 7 and board[i][j + n + barr] == board[i][j]:
-                n2 = n_horz(board, i, j + n + barr)
-            barr2 = barr + barr2
-            prev = 0
-            while j - prev - 1 >= 0 and board[i][j - prev - 1] == 0:
-                prev = prev + 1
-            score += getscore(n, n2, barr2 - 1, barr, prev)
+            if not (j - 1 >= 0 and board[i][j - 1] == board[i][j]):
+                n = n_horz(board, i, j)
+                opens, barr, barr2, n2 = 0, 0, 0, 0
+                if j + n < 7 and board[i][j + n] == 0:
+                    opens += 1
+                if opens > 0:
+                    barr += n_horz(board, i, j + n)
+                    for q in range(barr):
+                        if i - 1 < 0 or board[i - 1][j + n + q] != 0:
+                            barr2 += 1
+                if j + n + barr < 7 and board[i][j + n + barr] == board[i][j]:
+                    n2 = n_horz(board, i, j + n + barr)
+                barr2 = barr + barr2
+                prev = 0
+                while j - prev - 1 >= 0 and board[i][j - prev - 1] == 0:
+                    prev = prev + 1
+                score += getscore(n, n2, barr2 - 1, barr, prev)
             #################################################################################################
             if board[i][j] == 1:
                 player1_sc += score
             else:
                 player2_sc += score
-
+    table[state]=player1_sc - player2_sc
     return player1_sc - player2_sc
 
 
@@ -395,15 +401,16 @@ def getscore(n, n2, barr2, nextzeros, prevzeros):
         barr2 = 0
     score = 0
     if n >= 4:
-        score += 250
-    if n >= 3:
-        new = n2 + nextzeros - barr2
-    elif n == 2:
-        new = n2 + nextzeros - barr2 - 1
-    elif n == 1:
-        new = n2 + nextzeros - barr2 - 2
-    if new < 0:
-        new = 0
-    score += 50 * new
-    score += (nextzeros + prevzeros) * 7;
+        score += 250*(n-3)
+    if nextzeros!=0:
+        if n >= 3:
+            new = n2 + nextzeros - barr2
+        elif n == 2:
+            new = n2 + nextzeros - barr2 - 1
+        elif n == 1:
+            new = n2 + nextzeros - barr2 - 2
+        if new < 0:
+            new = 0
+        score += 30 * new
+    score += (nextzeros + prevzeros) * 1
     return score
