@@ -87,7 +87,7 @@ def play(current_state, heuristic, max_depth, pruning, ai_only):
             print(str(expansions.expansions) + ', ' + str(time.time() - start))
 
 
-if __name__ == "__main__":
-    play(xmpz(), True, 5, True, True)
+# if __name__ == "__main__":
+    # play(xmpz(), True, 5, True, True)
     # play(xmpz(), True, 5, True, True)
     # play(xmpz(), True, 5, False, True)
